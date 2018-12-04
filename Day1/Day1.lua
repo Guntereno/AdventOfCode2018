@@ -1,4 +1,4 @@
-file = assert(io.open ('Input1.txt', "r"))
+file = assert(io.open ('Input.txt', "r"))
 
 frequency_changes = {}
 while true do
@@ -10,7 +10,7 @@ while true do
   table.insert(frequency_changes, change)
 end
 
-function puzzle1 ()
+function puzzle_1 ()
   current_frequency = 0
   for index = 1, #frequency_changes do
     current_frequency = current_frequency + frequency_changes[index]
@@ -18,7 +18,7 @@ function puzzle1 ()
   print(current_frequency)
 end
 
-function puzzle2 ()
+function puzzle_2 ()
   done = false
   current_change_index = 1
   current_frequency = 0
@@ -39,5 +39,5 @@ function puzzle2 ()
   print(current_frequency)
 end
 
-puzzle1()
-puzzle2()
+puzzle_1()
+puzzle_2()
