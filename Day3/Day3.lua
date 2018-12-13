@@ -1,11 +1,19 @@
 file = assert(io.open ('Input.txt', "r"))
 
-function claim_right(claim)
-	return claim.x + claim.w
+function top(claim)
+	return claim.y + 1
 end
 
-function claim_bottom(claim)
+function bottom(claim)
 	return claim.y + claim.h
+end
+
+function left(claim)
+	return claim.x + 1
+end
+
+function right(claim)
+	return claim.x + claim.w
 end
 
 function line_to_claim(line)
@@ -17,8 +25,10 @@ function line_to_claim(line)
 	result["y"] = y
 	result["w"] = w
 	result["h"] = h
-	result["right"] = claim_right
-	result["bottom"] = claim_bottom
+	result.left = left
+	result.right = right
+	result.top = top
+	result.bottom = bottom
 	return result
 end
 
@@ -34,38 +44,47 @@ while true do
   table.insert(claims, line_to_claim(line))
 end
 
-function claims_intersect(a, b)
-	return (a.x < b.right() and
-	a.right() > b.left() and
-	a.y > b.bottom() and
-	a.bottom() < b.y ) 
-end
-
 function puzzle_1()
 	local freq_matrix = {}
-
-	for index, claim in pairs(claims) do 
-		for x = claim.x, claim:right() do
-			for y = claim.y, claim:bottom() do
-				local index = x + ((y-1) * sheet_width)
-				local current = freq_matrix[index] and (freq_matrix[index] + 1) or 1
-				freq_matrix[index] = current
-			end
-		end
+	local not_overlapping = {}
+	for index = 1,#claims,1 do
+		table.insert(not_overlapping, index)
 	end
-
 	local count = 0
-	for y = 1,1000 do
-		for x=1,1000 do
-			local index = x + ((y-1) * sheet_width)
-			local value = freq_matrix[index] and (freq_matrix[index] + 1) or 0
-			if value > 1 then
-				count = count + 1
+
+	for claim_index, claim in pairs(claims) do 
+		for x = claim:left(), claim:right() do
+			for y = claim:top(), claim:bottom() do
+				local index = x + ((y - 1) * sheet_width)
+				local is_shared = false
+				if (freq_matrix[index] == nil) then
+					freq_matrix[index] = {}
+				else
+					is_shared = true
+				end
+				table.insert(freq_matrix[index], claim_index)
+				if is_shared then
+					if (#(freq_matrix[index]) == 1) then
+						count = count + 1
+					end
+					for claimer_index = 1, #(freq_matrix[index]) do
+						claimer = freq_matrix[index][claimer_index]
+						not_overlapping[claimer] = nil
+					end
+				end
 			end
 		end
 	end
+	print("Part One: " .. count)
 
-	return count
+	local part_2_result = 0
+	local num_not_overlapping = 0
+	for key, value in pairs(not_overlapping) do
+		part_2_result = key
+		num_not_overlapping = num_not_overlapping + 1
+	end
+	assert(num_not_overlapping == 1)
+	print("Part Two: " .. part_2_result)
 end
 
 print(puzzle_1())

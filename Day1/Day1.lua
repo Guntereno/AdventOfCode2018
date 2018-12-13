@@ -15,7 +15,7 @@ function puzzle_1 ()
   for index = 1, #frequency_changes do
     current_frequency = current_frequency + frequency_changes[index]
   end
-  print(current_frequency)
+  print("Part One: " .. current_frequency)
 end
 
 function puzzle_2 ()
@@ -36,7 +36,7 @@ function puzzle_2 ()
       end
     end
   end
-  print(current_frequency)
+  print("Part Two: " .. current_frequency)
 end
 
 puzzle_1()

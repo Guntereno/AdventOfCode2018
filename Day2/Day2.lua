@@ -42,7 +42,7 @@ function calculate_checksum(ids)
 end
 
 function puzzle_1()
-	print(calculate_checksum(ids))
+	print("Part One: " .. calculate_checksum(ids))
 end
 
 function get_same_characters(str1, str2)
@@ -74,7 +74,7 @@ function puzzle_2()
 			break
 		end
 	end
-	print(result)
+	print("Part Two: " .. result)
 end
 
 puzzle_1()
