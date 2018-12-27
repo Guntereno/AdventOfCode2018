@@ -8,8 +8,8 @@
       "type": "lua",
       "request": "launch",
       "name": "Launch",
-      "program": "${workspaceFolder}/Day4/Day4.lua",
-      "cwd": "${workspaceFolder}/Day4"
+      "program": "${workspaceFolder}/Day5/Day5.lua",
+      "cwd": "${workspaceFolder}/Day5"
     }
   ]
 }
