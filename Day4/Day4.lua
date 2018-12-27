@@ -121,7 +121,11 @@ function get_most_slept_minute(shifts)
             most_slept_minute = minute
         end
     end
-    return most_slept_minute - 1
+    if(most_slept_minute) then
+        return most_slept_minute - 1, highest_frequency
+    else
+        return nil, nil
+    end
 end
 
 function strategy_one(data)
@@ -129,16 +133,32 @@ function strategy_one(data)
     local most_minutes_slept = 0
     for guard, shifts in pairs(data) do
         minutes_asleep = get_total_minutes_asleep(shifts)
-        if(minutes_asleep > most_minutes_slept) then
+        if(minutes_asleep and minutes_asleep > most_minutes_slept) then
             sleepiest_guard = guard
             most_minutes_slept = minutes_asleep
         end
     end
 
     local shifts = data[sleepiest_guard]
-    local most_slept_minute = get_most_slept_minute(shifts)
+    local most_slept_minute, frequency = get_most_slept_minute(shifts)
 
     print("Part One: " .. (sleepiest_guard * most_slept_minute))
+end
+
+function strategy_two(data)
+    local chosen_guard = nil
+    local chosen_minute = nil
+    local highest_frequency = 0
+    for guard, shifts in pairs(data) do
+        local most_slept_minute, frequency = get_most_slept_minute(shifts)
+        if(frequency and frequency > highest_frequency) then
+            chosen_guard = guard
+            chosen_minute = most_slept_minute
+            highest_frequency = frequency
+        end
+    end
+
+    print("Part Two: " .. (chosen_guard * chosen_minute))
 end
 
 function div(a, b)
@@ -179,7 +199,7 @@ function output_table(data)
     end
 end
 
-DataParser:process_file('InputExample.txt')
+DataParser:process_file('Input.txt')
 output_table(DataParser.data)
 strategy_one(DataParser.data)
-
+strategy_two(DataParser.data)
